@@ -1,3 +1,6 @@
+import random
+
+
 def create_board(board_input):
     for i in range(1, 10):
         board_input[i] = ' '
@@ -133,16 +136,17 @@ def minimax(board, isMaximizing):
         for key in board.keys():
             if board[key] == ' ':
                 board[key] = 'X'
+                print(board)
                 score = minimax(board, False)
                 board[key] = ' '
+                print(board)
+
 
                 if score > bestScore:
                     bestScore = score
         return bestScore
     else:
-
         bestScore = 1
-
         for key in board.keys():
             if board[key] == ' ':
                 board[key] = 'O'
@@ -154,6 +158,51 @@ def minimax(board, isMaximizing):
         return bestScore
 
 
+
+
 while not checkWin():
-    comMove()
+    # place = random.randrange(1,10)
+    board[1] = 'X'
     playerMove()
+    comMove()
+
+
+
+from tkinter import ttk
+from tkinter import *
+
+
+# root = Tk()
+# root.minsize(400, 800)
+# root.title('Tic-Tac-Toe')
+#
+# frame1 = ttk.Frame(root, padding=(20, 20), relief=SUNKEN)
+# frame1.grid(row=2, column=0)
+# button1 = ttk.Button(frame1, text='.')
+#
+# frame2 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame2.grid(row=2, column=1)
+# button2 = ttk.Button(frame1, text='.')
+# button2.grid()
+#
+# frame3 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame3.grid(row=2, column=2)
+# button3 = ttk.Button(frame1, text='.')
+#
+# frame4 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame4.grid(row=3, column=0)
+#
+# frame5 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame5.grid(row=3, column=1)
+#
+# frame6 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame6.grid(row=3, column=2)
+#
+# frame7 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame7.grid(row=4, column=0)
+#
+# frame8 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame8.grid(row=4, column=1)
+#
+# frame9 = ttk.Frame(root, padding = (20, 20), relief=SUNKEN)
+# frame9.grid(row=4, column=2)
