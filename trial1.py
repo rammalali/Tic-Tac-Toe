@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import tkinter.messagebox
 
 # Creation de la fenetre d'Accueil
 root = Tk()
@@ -13,8 +14,9 @@ frame = Frame(master)
 frame.grid(row=0, column=0)
 labelIntro = ttk.Label(frame, text='TIC TAC TOE').grid(row=0, column=1, columnspan=3, sticky=(N))
 
-BOT_TURN = True
-
+BOT_TURN = False
+someone_won = False
+count = 0
 
 
 def create_board(board):
@@ -134,30 +136,24 @@ def minimax(board, isMaximizing):
 
 
 def jouer(index):
-    global BOT_TURN
-    if(board[index] != " "):
+    global BOT_TURN, count
+    if board[index] != " ":
         print("Button is already clicked!")
+        tkinter.messagebox.showwarning(title="Warning!", message="Button already Clicked!")
 
     elif board[index] == " " and BOT_TURN:
+        count += 1
         comMove()
-        if checkWhoWon("X"):
-            print("bot win")
 
-    elif board[index] == " " and BOT_TURN==False:
+
+    elif board[index] == " " and BOT_TURN == False:
+        count += 1
         board[index] = "O"
         updateButtons()
         playerMove()
         checkWhoWon("X")
-        if checkWhoWon("O"):
-            print("player win")
 
-    # (liste_bouttons[index])['text'] = symbol
-    # (liste_bouttons[index])['state'] = "disabled"
-    # board[index] = symbol
-    # LAST_PLAY = index
-    # BOT_TURN = False
-    # USER_TURN = True
-    # playerMove()
+
 def updateButtons():
     b1['text'] = board[1]
     b2['text'] = board[2]
@@ -168,16 +164,21 @@ def updateButtons():
     b7['text'] = board[7]
     b8['text'] = board[8]
     b9['text'] = board[9]
+
+
 def playerMove():
-    global BOT_TURN
+    global BOT_TURN, someone_won
     BOT_TURN = True
+    if checkWhoWon("O"):
+        print("player win")
+        tkinter.messagebox.showwarning(title="Congrats!", message="Player Win!")
+        someone_won = True
+
     comMove()
 
 
-
-
 def comMove():
-    global BOT_TURN
+    global BOT_TURN, someone_won
     BOT_TURN = False
     bestScore = -1
     bestMove = 0  # will be changed
@@ -194,16 +195,24 @@ def comMove():
     # jouer(bestMove, 'X')
     board[bestMove] = "X"
     updateButtons()
+    if checkWhoWon("X"):
+        print("bot win")
+        tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
+        someone_won = True
 
-b1 = ttk.Button(frame, text=' ', command=lambda:jouer(1))
-b2 = ttk.Button(frame, text=' ', command=lambda:jouer(2))
-b3 = ttk.Button(frame, text=' ', command=lambda:jouer(3))
-b4 = ttk.Button(frame, text=' ', command=lambda:jouer(4))
-b5 = ttk.Button(frame, text=' ', command=lambda:jouer(5))
-b6 = ttk.Button(frame, text=' ', command=lambda:jouer(6))
-b7 = ttk.Button(frame, text=' ', command=lambda:jouer(7))
-b8 = ttk.Button(frame, text=' ', command=lambda:jouer(8))
-b9 = ttk.Button(frame, text=' ', command=lambda:jouer(9))
+    if count == 8 and someone_won == False:
+        tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
+
+
+b1 = ttk.Button(frame, text=' ', command=lambda: jouer(1))
+b2 = ttk.Button(frame, text=' ', command=lambda: jouer(2))
+b3 = ttk.Button(frame, text=' ', command=lambda: jouer(3))
+b4 = ttk.Button(frame, text=' ', command=lambda: jouer(4))
+b5 = ttk.Button(frame, text=' ', command=lambda: jouer(5))
+b6 = ttk.Button(frame, text=' ', command=lambda: jouer(6))
+b7 = ttk.Button(frame, text=' ', command=lambda: jouer(7))
+b8 = ttk.Button(frame, text=' ', command=lambda: jouer(8))
+b9 = ttk.Button(frame, text=' ', command=lambda: jouer(9))
 
 liste_bouttons = [b1, b1, b2, b3, b4, b5, b6, b7, b8, b9]
 
@@ -216,9 +225,6 @@ b6.grid(row=2, column=3)
 b7.grid(row=3, column=1)
 b8.grid(row=3, column=2)
 b9.grid(row=3, column=3)
-
-
-
 
 # PROG PRINCIPAL:
 # ================
