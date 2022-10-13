@@ -9,7 +9,7 @@ screen_width = master.winfo_screenwidth()
 screen_height = master.winfo_screenheight()
 master.minsize(screen_width, screen_height)
 master.title("Tic Tac Toe")
-bgcolor1 ="NavajoWhite3"
+bgcolor1 = "#E2FFDE"
 master['background'] = bgcolor1
 # for i in range(2):
 #             master.rowconfigure(i,weight=1)
@@ -17,28 +17,28 @@ master['background'] = bgcolor1
 s = ttk.Style()
 s.theme_use('clam')
 s = ttk.Style()
-s.configure('mod0.TFrame',background= bgcolor1) #"light slate gray"
-frame1 = ttk.Frame(master , style='mod0.TFrame')
-frame1.grid(row=0, column=0, padx= 570, pady= 30)
-frame2 = ttk.Frame(master , style='mod0.TFrame')
-frame2.grid(row=1, column=0, pady= 70)
-s.configure('mod0.TLabel', font=("Bold",42),background= bgcolor1 ,foreground="LightBlue4")
-s.configure('mod1.TLabel', font=("Silkscreen",18),background= bgcolor1 ,foreground="LightBlue4")
-labelIntro = ttk.Label(frame1, text='TIC TAC TOE' ,style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
-labelMinimax = ttk.Label(frame1, text='AI:Minimax bot' ,style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=(N))
+s.configure('mod0.TFrame', background=bgcolor1)  # "light slate gray"
+frame1 = ttk.Frame(master, style='mod0.TFrame')
+frame1.grid(row=0, column=0, padx=570, pady=30)
+frame2 = ttk.Frame(master, style='mod0.TFrame')
+frame2.grid(row=1, column=0, pady=70)
+s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor1, foreground="LightBlue4")
+s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor1, foreground="LightBlue4")
+labelIntro = ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
+labelMinimax = ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
+                                                                                  sticky=(N))
 
 s2 = ttk.Style()
-s2.configure('mod1.TButton',background="LightBlue4", foreground ="indian red",borderwidth=5, font=("Bold",25))
+s2.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5, font=("Bold", 25))
 
-
-quitterBoutton=ttk.Button(frame2,text="Quit", style="mod1.TButton",command=master.destroy)
-quitterBoutton.grid(row=4, column=3, pady= 70)
-TryAgainBoutton=ttk.Button(frame2,text="Try Again", style="mod1.TButton")
-TryAgainBoutton.grid(row=4, column=1, pady= 70)
-#labelCredits = ttk.Label(frame2, text='Powered by:\n Amjad Chreim \n Karen Lteif \n Ali Rammal' ,style="mod1.TLabel").grid(row=4, column=6 ,padx= 20, sticky=(W,N))
+quitterBoutton = ttk.Button(frame2, text="Quit", style="mod1.TButton", command=master.destroy)
+quitterBoutton.grid(row=4, column=3, pady=70)
+TryAgainBoutton = ttk.Button(frame2, text="Try Again", style="mod1.TButton")
+TryAgainBoutton.grid(row=4, column=1, pady=70)
+# labelCredits = ttk.Label(frame2, text='Powered by:\n Amjad Chreim \n Karen Lteif \n Ali Rammal' ,style="mod1.TLabel").grid(row=4, column=6 ,padx= 20, sticky=(W,N))
 
 s1 = ttk.Style()
-s1.configure('mod0.TButton',background="LightBlue3", foreground ="LightBlue4",borderwidth=5, font=("Bold",25))
+s1.configure('mod0.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5, font=("Bold", 25))
 
 BOT_TURN = False
 someone_won = False
@@ -168,12 +168,10 @@ def jouer(index):
         tkinter.messagebox.showwarning(title="Warning!", message="Button already Clicked!")
 
     elif board[index] == " " and BOT_TURN:
-        count += 1
         comMove()
 
 
     elif board[index] == " " and BOT_TURN == False:
-        count += 1
         board[index] = "O"
         updateButtons()
         playerMove()
@@ -190,13 +188,13 @@ def jouer(index):
 #     b7['text'] = board[7]
 #     b8['text'] = board[8]
 #     b9['text'] = board[9]
-def colorChecker(symbol, boutton) :
-    if (symbol=="X"):
+def colorChecker(symbol, boutton):
+    if (symbol == "X"):
         boutton['text'] = symbol
-        s1.configure('mod0.TButton',background="LightBlue3", foreground ="indian red",borderwidth=5, font=("Bold",25))
-    if (symbol=="O"):
+        s1.configure('mod0.TButton', background="LightBlue3", foreground="indian red", borderwidth=5, font=("Bold", 25))
+    if (symbol == "O"):
         boutton['text'] = symbol
-        s1.configure('mod0.TButton',background="LightBlue3", foreground ="LightBlue4",borderwidth=5, font=("Bold",25))
+        s1.configure('mod0.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5, font=("Bold", 25))
 
 
 def updateButtons():
@@ -212,8 +210,9 @@ def updateButtons():
 
 
 def playerMove():
-    global BOT_TURN, someone_won
+    global BOT_TURN, someone_won, count
     BOT_TURN = True
+    count += 1
     if checkWhoWon("O"):
         print("player win")
         tkinter.messagebox.showwarning(title="Congrats!", message="Player Win!")
@@ -223,8 +222,9 @@ def playerMove():
 
 
 def comMove():
-    global BOT_TURN, someone_won
+    global BOT_TURN, someone_won, count
     BOT_TURN = False
+    count += 1
     bestScore = -1
     bestMove = 0  # will be changed
 
@@ -244,9 +244,12 @@ def comMove():
         print("bot win")
         tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
         someone_won = True
+        master.destroy()
 
-    if count == 9 and someone_won == False:
+    print(count)
+    if count == 10 and someone_won == False:
         tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
+        master.destroy()
 
 
 b1 = ttk.Button(frame2, text=' ', style="mod0.TButton", command=lambda: jouer(1))
