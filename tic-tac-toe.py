@@ -113,7 +113,7 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            score = minimax(board, False)
+            score = expectimax(board, False)
             board[key] = ' '
 
             if score > bestScore:
@@ -136,10 +136,8 @@ def minimax(board, isMaximizing):
         for key in board.keys():
             if board[key] == ' ':
                 board[key] = 'X'
-                print(board)
                 score = minimax(board, False)
                 board[key] = ' '
-                print(board)
 
 
                 if score > bestScore:
@@ -158,6 +156,43 @@ def minimax(board, isMaximizing):
         return bestScore
 
 
+def expectimax(board, botturn):
+    count = 0
+    for key in board.keys():
+        if board[key] == ' ':
+            count += 1
+    if checkWhoWon('X'):
+        return 1
+    elif checkWhoWon('O'):
+        return -1
+    elif checkDraw():
+        return 0
+    if botturn:
+        bestScore = -1
+
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'X'
+                score = expectimax(board, False)
+                board[key] = ' '
+
+
+                if score > bestScore:
+                    bestScore = score
+        return bestScore
+    else:
+        bestScore = 0
+        for key in board.keys():
+            proba = 1/count
+            print(proba)
+            if board[key] == ' ':
+
+                board[key] = 'O'
+                bestScore += proba * expectimax(board, True)
+                board[key] = ' '
+        print(bestScore)
+        return bestScore
+    
 
 
 while not checkWin():
