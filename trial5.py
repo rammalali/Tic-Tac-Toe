@@ -26,13 +26,13 @@ frame2 = ttk.Frame(master, style='mod0.TFrame')
 frame2.grid(row=1, column=0, pady=70)
 s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor1, foreground="LightBlue4")
 s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor1, foreground="LightBlue4")
-ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
+ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=N)
 ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
-                                                                   sticky=(N))
+                                                                   sticky=N)
 
-game_type_btn = ttk.Button(frame1, text='Change Game Type', style="mod1.TButton", command=lambda: button_type()).grid(
+ttk.Button(frame1, text='Change Game Type', style="mod1.TButton", command=lambda: button_type()).grid(
     row=2, column=1, columnspan=3,
-    sticky=(N))
+    sticky=N)
 
 s2 = ttk.Style()
 s2.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5, font=("Bold", 25))
@@ -40,7 +40,8 @@ s2.configure('mod1.TButton', background="LightBlue4", foreground="indian red", b
 quitterBoutton = ttk.Button(frame2, text="Quit", style="mod1.TButton", command=master.destroy)
 quitterBoutton.grid(row=4, column=3, pady=70)
 
-# labelCredits = ttk.Label(frame2, text='Powered by:\n Amjad Chreim \n Karen Lteif \n Ali Rammal' ,style="mod1.TLabel").grid(row=4, column=6 ,padx= 20, sticky=(W,N))
+# labelCredits = ttk.Label(frame2, text='Powered by:\n Amjad Chreim \n Karen Lteif \n Ali Rammal' ,
+# style="mod1.TLabel").grid(row=4, column=6 ,padx= 20, sticky=(W,N))
 
 s1 = ttk.Style()
 s1.configure('mod1.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5, font=("Bold", 25))
@@ -222,8 +223,6 @@ def jouer(index):
     elif board[index] == " " and BOT_TURN:
         comMove()
 
-
-
     elif board[index] == " " and BOT_TURN == False:
         board[index] = "O"
         updateButtons()
@@ -242,13 +241,13 @@ def jouer(index):
 #     b8['text'] = board[8]
 #     b9['text'] = board[9]
 def colorChecker(symbol, boutton):
-    if (symbol == "X"):
+    if symbol == "X":
         boutton['text'] = symbol
 
-    if (symbol == "O"):
+    if symbol == "O":
         boutton['text'] = symbol
 
-    if (symbol == " "):
+    if symbol == " ":
         boutton['text'] = symbol
         boutton['state'] = NORMAL
 
@@ -315,13 +314,13 @@ def button_type():
 
     if button_is_minimax:
 
-        ttk.Label(frame1, text="AI:ExpectiMax bot", style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=(N))
+        ttk.Label(frame1, text="AI:ExpectiMax bot", style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=N)
 
         button_is_minimax = False
 
     else:
         ttk.Label(frame1, text="   AI:Minimax bot   ", style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
-                                                                                 sticky=(N))
+                                                                                 sticky=N)
 
         button_is_minimax = True
 
@@ -336,7 +335,7 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            if (button_is_minimax):
+            if button_is_minimax:
                 print("mini")
                 score = minimax(board, False)
             else:

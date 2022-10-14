@@ -27,14 +27,18 @@ frame2 = ttk.Frame(master, style='mod0.TFrame')
 frame2.grid(row=1, column=0, pady=70)
 s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor, foreground="LightBlue4")
 s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor, foreground="LightBlue4")
-labelIntro = ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
-labelMinimax = ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,sticky=(N))
+ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
+ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,sticky=(N))
+ttk.Button(frame1, text='Change Game Type', style="mod1.TButton", command=lambda: button_type()).grid(
+    row=2, column=1, columnspan=3,
+    sticky=N)
+ttk.Label(frame1, text='', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
+
 
 s1 = ttk.Style()
 s1.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5, font=("Bold", 25)) #TryAgain & Quit buttons
 
 
-# labelCredits = ttk.Label(frame2, text='Powered by:\n Amjad Chreim \n Karen Lteif \n Ali Rammal' ,style="mod1.TLabel").grid(row=4, column=6 ,padx= 20, sticky=(W,N))
 
 s2 = ttk.Style()
 s2.configure('mod2.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5, font=("Bold", 25))  #9 buttons color
@@ -43,6 +47,7 @@ s3.configure('mod3.TButton', background="LightBlue3", foreground="indian red", b
 
 
 BOT_TURN = False
+button_is_minimax = True
 someone_won = False
 count = 0
 
@@ -223,7 +228,8 @@ def playerMove():
     count += 1
     if checkWhoWon("O"):
         print("player win")
-        tkinter.messagebox.showwarning(title="Congrats!", message="Player Win!")
+        # tkinter.messagebox.showwarning(title="Congrats!", message="Player Win!")
+        ttk.Label(frame1, text='Player Win!', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
         someone_won = True
     comMove()
 
@@ -251,9 +257,22 @@ def checkWhoWonTkinter(letter):
         
     elif board[3] == board[5] and board[3] == board[7] and board[3] == letter:
         b3['style']=b5['style']=b7['style']="mod3.TButton"
-        
 
- 
+
+def button_type():
+
+    global button_is_minimax
+    TryAgain()
+    if button_is_minimax:
+
+        ttk.Label(frame1, text="AI:ExpectiMax bot", style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=N)
+        button_is_minimax = False
+
+    else:
+        ttk.Label(frame1, text="   AI:Minimax bot   ", style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
+                                                                                 sticky=N)
+        button_is_minimax = True
+
 
 def comMove():
     global BOT_TURN, someone_won, count
@@ -278,14 +297,17 @@ def comMove():
         print("bot win")
         disable_emptys()
         checkWhoWonTkinter("X")
+        ttk.Label(frame1, text='Bot Win!', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
 
-        tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
+        # tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
         someone_won = True
         
     print(count)
     if count == 10 and someone_won == False:
         disable_emptys()
-        tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
+        ttk.Label(frame1, text='Draw!', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
+
+        # tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
         
 
 
@@ -293,6 +315,8 @@ def TryAgain(board=board):
         global BOT_TURN
         global someone_won
         global count
+        ttk.Label(frame1, text='            ', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
+
         for index in board.keys():
             board[index]=" "
         BOT_TURN = False

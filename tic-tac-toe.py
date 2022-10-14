@@ -113,7 +113,7 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            score = minimax_alphaBeta(board, False, -100, 100)
+            score = minimax_alphaBeta(board, False, -1, 1)
             board[key] = ' '
 
             if score > bestScore:
