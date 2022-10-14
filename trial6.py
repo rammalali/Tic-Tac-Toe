@@ -10,7 +10,9 @@ from turtle import bgcolor
 master = Tk()
 screen_width = master.winfo_screenwidth()
 screen_height = master.winfo_screenheight()
-master.minsize(screen_width, screen_height)
+master.minsize(int(screen_width/4), int(screen_height/4))
+# s = str(int(screen_width/2)) + "x" + str(int(screen_height/2))
+# master.geometry(s)
 master.title("Tic Tac Toe")
 
 # Style Creation
@@ -22,9 +24,9 @@ s.theme_use('clam')
 s.configure('mod0.TFrame', background=bgcolor)
 
 frame1 = ttk.Frame(master, style='mod0.TFrame')
-frame1.grid(row=0, column=0, padx=570, pady=30)
+frame1.grid(row=0, column=0, padx=570/2, pady=30/2)
 frame2 = ttk.Frame(master, style='mod0.TFrame')
-frame2.grid(row=1, column=0, pady=70)
+frame2.grid(row=1, column=0, pady=70/2)
 s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor, foreground="LightBlue4")
 s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor, foreground="LightBlue4")
 ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
@@ -378,21 +380,21 @@ b9 = ttk.Button(frame2, text=' ', style="mod2.TButton", command=lambda: jouer(9)
 
 liste_bouttons = [b1, b1, b2, b3, b4, b5, b6, b7, b8, b9]
 
-b1.grid(row=1, column=1, ipady=45)
-b2.grid(row=1, column=2, ipady=45)
-b3.grid(row=1, column=3, ipady=45)
-b4.grid(row=2, column=1, ipady=45)
-b5.grid(row=2, column=2, ipady=45)
-b6.grid(row=2, column=3, ipady=45)
-b7.grid(row=3, column=1, ipady=45)
-b8.grid(row=3, column=2, ipady=45)
-b9.grid(row=3, column=3, ipady=45)
+b1.grid(row=1, column=1, ipady=45/2)
+b2.grid(row=1, column=2, ipady=45/2)
+b3.grid(row=1, column=3, ipady=45/2)
+b4.grid(row=2, column=1, ipady=45/2)
+b5.grid(row=2, column=2, ipady=45/2)
+b6.grid(row=2, column=3, ipady=45/2)
+b7.grid(row=3, column=1, ipady=45/2)
+b8.grid(row=3, column=2, ipady=45/2)
+b9.grid(row=3, column=3, ipady=45/2)
 
 TryAgainBoutton = ttk.Button(frame2, text="Try Again", style="mod1.TButton", command=TryAgain)
-TryAgainBoutton.grid(row=4, column=1, pady=70)
+TryAgainBoutton.grid(row=4, column=1, pady=70/2)
 
 quitterBoutton = ttk.Button(frame2, text="Quit", style="mod1.TButton", command=master.destroy)
-quitterBoutton.grid(row=4, column=3, pady=70)
+quitterBoutton.grid(row=4, column=3, pady=70/2)
 
 # PROG PRINCIPAL:
 # ================
