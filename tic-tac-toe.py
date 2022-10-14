@@ -113,7 +113,7 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            score = expectimax(board, False)
+            score = minimax_alphaBeta(board, False, -100, 100)
             board[key] = ' '
 
             if score > bestScore:
@@ -138,7 +138,6 @@ def minimax(board, isMaximizing):
                 board[key] = 'X'
                 score = minimax(board, False)
                 board[key] = ' '
-
 
                 if score > bestScore:
                     bestScore = score
@@ -176,36 +175,72 @@ def expectimax(board, botturn):
                 score = expectimax(board, False)
                 board[key] = ' '
 
-
                 if score > bestScore:
                     bestScore = score
         return bestScore
     else:
         bestScore = 0
         for key in board.keys():
-            proba = 1/count
+            proba = 1 / count
             print(proba)
             if board[key] == ' ':
-
                 board[key] = 'O'
                 bestScore += proba * expectimax(board, True)
                 board[key] = ' '
         print(bestScore)
         return bestScore
-    
+
+def minimax_alphaBeta(board, isMaximizing, alpha, beta):
+    if checkWhoWon('X'):
+        return 1
+    elif checkWhoWon('O'):
+        return -1
+    elif checkDraw():
+        return 0
+
+    if isMaximizing:
+        bestScore = -100
+
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'X'
+                score = minimax_alphaBeta(board, False, alpha, beta)
+                board[key] = ' '
+
+                if score > bestScore:
+                    bestScore = score
+
+                if  bestScore >= beta:
+                    return bestScore
+                if bestScore > alpha:
+                    alpha = bestScore
+
+        return bestScore
+    else:
+        bestScore = 100
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'O'
+                score = minimax_alphaBeta(board, True, alpha, beta)
+                board[key] = ' '
+
+                if score < bestScore:
+                    bestScore = score
+                if bestScore <= alpha:
+                    return bestScore
+                if bestScore < beta:
+                    beta = bestScore
+        return bestScore
 
 
 while not checkWin():
     # place = random.randrange(1,10)
-    board[1] = 'X'
+    # board[1] = 'X'
     playerMove()
     comMove()
 
-
-
 from tkinter import ttk
 from tkinter import *
-
 
 # root = Tk()
 # root.minsize(400, 800)
