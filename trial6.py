@@ -11,6 +11,8 @@ master = Tk()
 screen_width = master.winfo_screenwidth()
 screen_height = master.winfo_screenheight()
 master.minsize(int(screen_width/4), int(screen_height/4))
+master.maxsize(int(screen_width/1.65), int(screen_height/1.2))
+
 # s = str(int(screen_width/2)) + "x" + str(int(screen_height/2))
 # master.geometry(s)
 master.title("Tic Tac Toe")
