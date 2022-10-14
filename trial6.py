@@ -13,13 +13,13 @@ screen_height = master.winfo_screenheight()
 master.minsize(screen_width, screen_height)
 master.title("Tic Tac Toe")
 
-#Style Creation
+# Style Creation
 bgcolor = "#E2FFDE"
 master['background'] = bgcolor
 
 s = ttk.Style()
 s.theme_use('clam')
-s.configure('mod0.TFrame', background=bgcolor)  
+s.configure('mod0.TFrame', background=bgcolor)
 
 frame1 = ttk.Frame(master, style='mod0.TFrame')
 frame1.grid(row=0, column=0, padx=570, pady=30)
@@ -28,23 +28,22 @@ frame2.grid(row=1, column=0, pady=70)
 s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor, foreground="LightBlue4")
 s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor, foreground="LightBlue4")
 ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
-ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,sticky=(N))
+ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=(N))
 ttk.Button(frame1, text='Change Game Type', style="mod1.TButton", command=lambda: button_type()).grid(
     row=2, column=1, columnspan=3,
     sticky=N)
 ttk.Label(frame1, text='', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
 
-
 s1 = ttk.Style()
-s1.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5, font=("Bold", 25)) #TryAgain & Quit buttons
-
-
+s1.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5,
+             font=("Bold", 25))  # TryAgain & Quit buttons
 
 s2 = ttk.Style()
-s2.configure('mod2.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5, font=("Bold", 25))  #9 buttons color
+s2.configure('mod2.TButton', background="LightBlue3", foreground="LightBlue4", borderwidth=5,
+             font=("Bold", 25))  # 9 buttons color
 s3 = ttk.Style()
-s3.configure('mod3.TButton', background="LightBlue3", foreground="indian red", borderwidth=5, font=("Bold", 25))  #Winning buttons
-
+s3.configure('mod3.TButton', background="LightBlue3", foreground="indian red", borderwidth=5,
+             font=("Bold", 25))  # Winning buttons
 
 BOT_TURN = False
 button_is_minimax = True
@@ -59,7 +58,6 @@ def create_board(board):
 
 
 board = create_board({})
-
 
 
 def spaceIsFree(position):
@@ -116,7 +114,7 @@ def checkWin():
 
 
 def checkWhoWon(letter):
-    if board[1] == board[2] and board[1] == board[3] and board[1] == letter: 
+    if board[1] == board[2] and board[1] == board[3] and board[1] == letter:
         return True
     elif board[4] == board[5] and board[4] == board[6] and board[4] == letter:
         return True
@@ -134,7 +132,6 @@ def checkWhoWon(letter):
         return True
     else:
         return False
-
 
 
 def minimax(board, isMaximizing):
@@ -172,6 +169,42 @@ def minimax(board, isMaximizing):
         return bestScore
 
 
+def expectimax(board, botturn):
+    n = 0
+    for key in board.keys():
+        if board[key] == ' ':
+            n += 1
+    if checkWhoWon('X'):
+        return 1
+    elif checkWhoWon('O'):
+        return -1
+    elif checkDraw():
+        return 0
+    if botturn:
+        bestScore = -1
+
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'X'
+                score = expectimax(board, False)
+                board[key] = ' '
+
+                if score > bestScore:
+                    bestScore = score
+        return bestScore
+    else:
+        bestScore = 0
+        for key in board.keys():
+            proba = 1 / n
+            # print(proba)
+            if board[key] == ' ':
+                board[key] = 'O'
+                bestScore += proba * expectimax(board, True)
+                board[key] = ' '
+        # print(bestScore)
+        return bestScore
+
+
 def jouer(index):
     global BOT_TURN, count
     if board[index] != " ":
@@ -190,17 +223,18 @@ def jouer(index):
         checkWhoWon("X")
 
 
-def colorChecker(symbol, boutton) :
-    if (symbol=="X"):
+def colorChecker(symbol, boutton):
+    if (symbol == "X"):
         boutton['text'] = symbol
-        
-    if (symbol=="O"):
+
+    if (symbol == "O"):
         boutton['text'] = symbol
-        
-    if (symbol==" "):
+
+    if (symbol == " "):
         boutton['text'] = symbol
-        boutton ['state']= NORMAL
-        
+        boutton['state'] = NORMAL
+
+
 def updateButtons():
     colorChecker(board[1], b1)
     colorChecker(board[2], b2)
@@ -212,15 +246,17 @@ def updateButtons():
     colorChecker(board[8], b8)
     colorChecker(board[9], b9)
 
+
 def disable_emptys():
     for index in board.keys():
-        if liste_bouttons[index]['text']==" ":
-            liste_bouttons[index]["state"]=DISABLED
+        if liste_bouttons[index]['text'] == " ":
+            liste_bouttons[index]["state"] = DISABLED
 
 
 def updateStyles():
     for index in board.keys():
-        liste_bouttons[index]["style"]= "mod2.TButton"  
+        liste_bouttons[index]["style"] = "mod2.TButton"
+
 
 def playerMove():
     global BOT_TURN, someone_won, count
@@ -233,34 +269,34 @@ def playerMove():
         someone_won = True
     comMove()
 
+
 def checkWhoWonTkinter(letter):
     if board[1] == board[2] and board[1] == board[3] and board[1] == letter:
-        b1['style']=b2['style']=b3['style']="mod3.TButton"
+        b1['style'] = b2['style'] = b3['style'] = "mod3.TButton"
 
     elif board[4] == board[5] and board[4] == board[6] and board[4] == letter:
-        b4['style']=b5['style']=b6['style']="mod3.TButton"
-        
+        b4['style'] = b5['style'] = b6['style'] = "mod3.TButton"
+
     elif board[7] == board[8] and board[7] == board[9] and board[7] == letter:
-        b7['style']=b8['style']=b9['style']="mod3.TButton"
-        
+        b7['style'] = b8['style'] = b9['style'] = "mod3.TButton"
+
     elif board[1] == board[4] and board[1] == board[7] and board[1] == letter:
-        b1['style']=b4['style']=b7['style']="mod3.TButton"
-        
+        b1['style'] = b4['style'] = b7['style'] = "mod3.TButton"
+
     elif board[2] == board[5] and board[2] == board[8] and board[2] == letter:
-        b2['style']=b5['style']=b8['style']="mod3.TButton"
-        
+        b2['style'] = b5['style'] = b8['style'] = "mod3.TButton"
+
     elif board[3] == board[6] and board[3] == board[9] and board[3] == letter:
-        b3['style']=b6['style']=b9['style']="mod3.TButton"
-        
+        b3['style'] = b6['style'] = b9['style'] = "mod3.TButton"
+
     elif board[1] == board[5] and board[1] == board[9] and board[1] == letter:
-        b1['style']=b5['style']=b9['style']="mod3.TButton"
-        
+        b1['style'] = b5['style'] = b9['style'] = "mod3.TButton"
+
     elif board[3] == board[5] and board[3] == board[7] and board[3] == letter:
-        b3['style']=b5['style']=b7['style']="mod3.TButton"
+        b3['style'] = b5['style'] = b7['style'] = "mod3.TButton"
 
 
 def button_type():
-
     global button_is_minimax
     TryAgain()
     if button_is_minimax:
@@ -284,13 +320,18 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            score = minimax(board, False)
+            if button_is_minimax:
+                print("mini")
+                score = minimax(board, False)
+            else:
+                print("expct")
+                score = expectimax(board, False)
             board[key] = ' '
 
             if score > bestScore:
                 bestScore = score
                 bestMove = key
-    
+
     board[bestMove] = "X"
     updateButtons()
     if checkWhoWon("X"):
@@ -301,29 +342,28 @@ def comMove():
 
         # tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
         someone_won = True
-        
+
     print(count)
     if count == 10 and someone_won == False:
         disable_emptys()
         ttk.Label(frame1, text='Draw!', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
 
         # tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
-        
 
 
 def TryAgain(board=board):
-        global BOT_TURN
-        global someone_won
-        global count
-        ttk.Label(frame1, text='            ', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
+    global BOT_TURN
+    global someone_won
+    global count
+    ttk.Label(frame1, text='            ', style="mod1.TLabel").grid(row=3, column=1, columnspan=3, sticky=N)
 
-        for index in board.keys():
-            board[index]=" "
-        BOT_TURN = False
-        someone_won = False
-        count = 0
-        updateButtons()
-        updateStyles()
+    for index in board.keys():
+        board[index] = " "
+    BOT_TURN = False
+    someone_won = False
+    count = 0
+    updateButtons()
+    updateStyles()
 
 
 b1 = ttk.Button(frame2, text=' ', style="mod2.TButton", command=lambda: jouer(1))
