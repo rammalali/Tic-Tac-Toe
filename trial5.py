@@ -26,9 +26,13 @@ frame2 = ttk.Frame(master, style='mod0.TFrame')
 frame2.grid(row=1, column=0, pady=70)
 s.configure('mod0.TLabel', font=("Bold", 42), background=bgcolor1, foreground="LightBlue4")
 s.configure('mod1.TLabel', font=("Silkscreen", 18), background=bgcolor1, foreground="LightBlue4")
-labelIntro = ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
-labelMinimax = ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
-                                                                                  sticky=(N))
+ttk.Label(frame1, text='TIC TAC TOE', style="mod0.TLabel").grid(row=0, column=1, columnspan=3, sticky=(N))
+ttk.Label(frame1, text='AI:Minimax bot', style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
+                                                                   sticky=(N))
+
+game_type_btn = ttk.Button(frame1, text='Change Game Type', style="mod1.TButton", command=lambda: button_type()).grid(
+    row=2, column=1, columnspan=3,
+    sticky=(N))
 
 s2 = ttk.Style()
 s2.configure('mod1.TButton', background="LightBlue4", foreground="indian red", borderwidth=5, font=("Bold", 25))
@@ -43,21 +47,19 @@ s1.configure('mod1.TButton', background="LightBlue3", foreground="LightBlue4", b
 s2 = ttk.Style()
 s2.configure('mod2.TButton', background="LightBlue3", foreground="indian red", borderwidth=5, font=("Bold", 25))
 
-
 BOT_TURN = False
+button_is_minimax = True
 someone_won = False
 count = 0
 
 
-
-
-        
 def restart_program():
     """Restarts the current program.
     Note: this function does not return. Any cleanup action (like
     saving data) must be done before calling this function."""
     python = sys.executable
-    os.execl(python, python, * sys.argv)    
+    os.execl(python, python, *sys.argv)
+
 
 def create_board(board):
     for i in range(1, 10):
@@ -66,7 +68,6 @@ def create_board(board):
 
 
 board = create_board({})
-
 
 
 def spaceIsFree(position):
@@ -121,7 +122,7 @@ def checkWin():
 
 
 def checkWhoWon(letter):
-    if board[1] == board[2] and board[1] == board[3] and board[1] == letter: 
+    if board[1] == board[2] and board[1] == board[3] and board[1] == letter:
         return True
     elif board[4] == board[5] and board[4] == board[6] and board[4] == letter:
         return True
@@ -139,7 +140,6 @@ def checkWhoWon(letter):
         return True
     else:
         return False
-
 
 
 def minimax(board, isMaximizing):
@@ -177,6 +177,42 @@ def minimax(board, isMaximizing):
         return bestScore
 
 
+def expectimax(board, botturn):
+    n = 0
+    for key in board.keys():
+        if board[key] == ' ':
+            n += 1
+    if checkWhoWon('X'):
+        return 1
+    elif checkWhoWon('O'):
+        return -1
+    elif checkDraw():
+        return 0
+    if botturn:
+        bestScore = -1
+
+        for key in board.keys():
+            if board[key] == ' ':
+                board[key] = 'X'
+                score = expectimax(board, False)
+                board[key] = ' '
+
+                if score > bestScore:
+                    bestScore = score
+        return bestScore
+    else:
+        bestScore = 0
+        for key in board.keys():
+            proba = 1 / n
+            # print(proba)
+            if board[key] == ' ':
+                board[key] = 'O'
+                bestScore += proba * expectimax(board, True)
+                board[key] = ' '
+        # print(bestScore)
+        return bestScore
+
+
 def jouer(index):
     global BOT_TURN, count
     if board[index] != " ":
@@ -205,17 +241,18 @@ def jouer(index):
 #     b7['text'] = board[7]
 #     b8['text'] = board[8]
 #     b9['text'] = board[9]
-def colorChecker(symbol, boutton) :
-    if (symbol=="X"):
+def colorChecker(symbol, boutton):
+    if (symbol == "X"):
         boutton['text'] = symbol
-        
-    if (symbol=="O"):
+
+    if (symbol == "O"):
         boutton['text'] = symbol
-        
-    if (symbol==" "):
+
+    if (symbol == " "):
         boutton['text'] = symbol
-        boutton ['state']= NORMAL
-        
+        boutton['state'] = NORMAL
+
+
 def updateButtons():
     colorChecker(board[1], b1)
     colorChecker(board[2], b2)
@@ -226,16 +263,20 @@ def updateButtons():
     colorChecker(board[7], b7)
     colorChecker(board[8], b8)
     colorChecker(board[9], b9)
+
+
 def disable_all():
-    b1["state"]=DISABLED
-    b2["state"]=DISABLED
-    b3["state"]=DISABLED
-    b4["state"]=DISABLED
-    b5["state"]=DISABLED
-    b6["state"]=DISABLED
-    b7["state"]=DISABLED
-    b8["state"]=DISABLED
-    b9["state"]=DISABLED
+    b1["state"] = DISABLED
+    b2["state"] = DISABLED
+    b3["state"] = DISABLED
+    b4["state"] = DISABLED
+    b5["state"] = DISABLED
+    b6["state"] = DISABLED
+    b7["state"] = DISABLED
+    b8["state"] = DISABLED
+    b9["state"] = DISABLED
+
+
 def playerMove():
     global BOT_TURN, someone_won, count
     BOT_TURN = True
@@ -246,6 +287,8 @@ def playerMove():
         someone_won = True
 
     comMove()
+
+
 def checkWhoWonTkinter(letter):
     if board[1] == board[2] and board[1] == board[3] and board[1] == letter:
         s1.configure
@@ -267,8 +310,24 @@ def checkWhoWonTkinter(letter):
         return False
 
 
+def button_type():
+    global button_is_minimax
+
+    if button_is_minimax:
+
+        ttk.Label(frame1, text="AI:ExpectiMax bot", style="mod1.TLabel").grid(row=1, column=1, columnspan=3, sticky=(N))
+
+        button_is_minimax = False
+
+    else:
+        ttk.Label(frame1, text="   AI:Minimax bot   ", style="mod1.TLabel").grid(row=1, column=1, columnspan=3,
+                                                                                 sticky=(N))
+
+        button_is_minimax = True
+
+
 def comMove():
-    global BOT_TURN, someone_won, count
+    global BOT_TURN, someone_won, count, button_is_minimax
     BOT_TURN = False
     count += 1
     bestScore = -1
@@ -277,7 +336,12 @@ def comMove():
     for key in board.keys():
         if board[key] == ' ':
             board[key] = 'X'
-            score = minimax(board, False)
+            if (button_is_minimax):
+                print("mini")
+                score = minimax(board, False)
+            else:
+                print("expct")
+                score = expectimax(board, False)
             board[key] = ' '
 
             if score > bestScore:
@@ -293,24 +357,23 @@ def comMove():
 
         tkinter.messagebox.showwarning(title="Congrats!", message="Bot Win!")
         someone_won = True
-        
-    print(count)
+
+    # print(count)
     if count == 10 and someone_won == False:
         disable_all()
         tkinter.messagebox.showwarning(title="Fin!", message="Draw!")
-        
 
 
 def TryAgain(board=board):
-        global BOT_TURN
-        global someone_won
-        global count
-        for index in board.keys():
-            board[index]=" "
-        BOT_TURN = False
-        someone_won = False
-        count = 0
-        updateButtons()
+    global BOT_TURN
+    global someone_won
+    global count
+    for index in board.keys():
+        board[index] = " "
+    BOT_TURN = False
+    someone_won = False
+    count = 0
+    updateButtons()
 
 
 b1 = ttk.Button(frame2, text=' ', style="mod1.TButton", command=lambda: jouer(1))

@@ -190,6 +190,7 @@ def expectimax(board, botturn):
         print(bestScore)
         return bestScore
 
+
 def minimax_alphaBeta(board, isMaximizing, alpha, beta):
     if checkWhoWon('X'):
         return 1
@@ -210,7 +211,7 @@ def minimax_alphaBeta(board, isMaximizing, alpha, beta):
                 if score > bestScore:
                     bestScore = score
 
-                if  bestScore >= beta:
+                if bestScore >= beta:
                     return bestScore
                 if bestScore > alpha:
                     alpha = bestScore
